@@ -87,11 +87,9 @@ flutter:
     - resimler/topImage.png
     - veritabani/gelir_gider_db.sqlite
     - resimler/budget.png
-    - resimler/create_account.png
-    - resimler/expense_page.png
-    - resimler/home_page.png
-    - resimler/income_page.png
-    - resimler/login_page.png
+    - resimler/create_account.jpg
+    - resimler/home_page.jpg
+    - resimler/login_page.jpg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
