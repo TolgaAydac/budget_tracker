@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gelir_gider/Gider.dart';
 import 'package:gelir_gider/gunceldurum.dart';
 import 'Gelir.dart';
+import 'aylik_ozet.dart';
 
 class AnaSayfa extends StatefulWidget {
   const AnaSayfa({super.key});
@@ -11,7 +12,12 @@ class AnaSayfa extends StatefulWidget {
 }
 
 class _AnaSayfaState extends State<AnaSayfa> {
-  var sayfaListesi = [Gelir_Sayfasi(), gunceldurum(), Gider_Sayfasi()];
+  var sayfaListesi = [
+    Gelir_Sayfasi(),
+    gunceldurum(),
+    Gider_Sayfasi(),
+    AylikOzetSayfasi(),
+  ];
 
   int secilenIndeks = 1;
 
@@ -52,6 +58,10 @@ class _AnaSayfaState extends State<AnaSayfa> {
               icon: Icon(Icons.trending_down),
               label: "Giderlerim",
             ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.pending_actions),
+              label: "Aylık Özet",
+            ),
           ],
           backgroundColor: Color(0xFF21254A),
           unselectedItemColor: Colors.white30,
@@ -62,6 +72,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
           iconSize: 45,
           elevation: 0,
           currentIndex: secilenIndeks,
+
           onTap: (indeks) {
             setState(() {
               secilenIndeks = indeks;
