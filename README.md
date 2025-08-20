@@ -26,8 +26,7 @@ A simple **Budget Tracker App** built with **Flutter** to help you manage your i
 - Some features are still under development.
 - "Forgot Password" functionality is not yet implemented.
 - UI screenshots may show features that are not fully functional yet.
-- ⚠️ **Monthly Summary Page**  
-  - Not yet connected to the SQL database.  
+- **Monthly Summary Page** is not connected to the SQL database yet.  
   - Data is currently displayed manually for demonstration.  
   - Will fetch data from income/expense tables in the future and update monthly.
 
