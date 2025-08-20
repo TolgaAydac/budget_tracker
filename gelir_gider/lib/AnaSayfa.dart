@@ -52,7 +52,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.account_balance_wallet),
-              label: "Mevcut Durumum",
+              label: "Durumum",
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.trending_down),

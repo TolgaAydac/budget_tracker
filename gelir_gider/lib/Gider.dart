@@ -76,18 +76,6 @@ class _Gider_SayfasiState extends State<Gider_Sayfasi> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Center(
-            child: Text(
-              "Giderlerim",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          SizedBox(height: 16),
-
           Expanded(
             child: giderler.isEmpty
                 ? Center(

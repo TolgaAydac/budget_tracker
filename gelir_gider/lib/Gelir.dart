@@ -5,7 +5,6 @@ import 'islem.dart';
 import 'Gelir_ekle.dart';
 import 'VeriTabaniYardımci.dart';
 
-
 class Gelir_Sayfasi extends StatefulWidget {
   const Gelir_Sayfasi({super.key});
 
@@ -77,17 +76,6 @@ class _Gelir_SayfasiState extends State<Gelir_Sayfasi> {
       padding: EdgeInsets.all(16),
       child: Column(
         children: [
-          Center(
-            child: Text(
-              "Gelirlerim",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          SizedBox(height: 16),
           Expanded(
             child: gelirler.isEmpty
                 ? Center(
