@@ -22,7 +22,7 @@ A simple **Budget Tracker App** built with **Flutter** to help you manage your i
   <img src="https://github.com/TolgaAydac/budget_tracker/raw/main/gelir_gider/resimler/home_page.jpg" alt="Home Page" width="250">
 </div>
 
-## Notes
+## Roadmap
 - Some features are still under development.
 - "Forgot Password" functionality is not yet implemented.
 - UI screenshots may show features that are not fully functional yet.
