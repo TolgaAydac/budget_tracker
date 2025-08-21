@@ -9,18 +9,20 @@ class HesapOlustur extends StatefulWidget {
   State<HesapOlustur> createState() => _HesapOlusturState();
 }
 
-final adController = TextEditingController();
-final soyadController = TextEditingController();
-final kullaniciAdiController = TextEditingController();
-final sifreController = TextEditingController();
-
 class _HesapOlusturState extends State<HesapOlustur> {
+  final adController = TextEditingController();
+  final soyadController = TextEditingController();
+  final kullaniciAdiController = TextEditingController();
+  final sifreController = TextEditingController();
+  final gizliSoruController = TextEditingController();
+
   bool _sifreGoster = false;
 
   final FocusNode _adFocus = FocusNode();
   final FocusNode _soyadFocus = FocusNode();
   final FocusNode _kullaniciAdiFocus = FocusNode();
   final FocusNode _sifreFocus = FocusNode();
+  final FocusNode _gizliSoruFocus = FocusNode();
 
   @override
   void dispose() {
@@ -28,6 +30,13 @@ class _HesapOlusturState extends State<HesapOlustur> {
     _soyadFocus.dispose();
     _kullaniciAdiFocus.dispose();
     _sifreFocus.dispose();
+    _gizliSoruFocus.dispose();
+
+    adController.dispose();
+    soyadController.dispose();
+    kullaniciAdiController.dispose();
+    sifreController.dispose();
+    gizliSoruController.dispose();
     super.dispose();
   }
 
@@ -59,113 +68,45 @@ class _HesapOlusturState extends State<HesapOlustur> {
                     ),
                   ),
                   customSizedBox(),
-
-                  TextFormField(
-                    controller: adController,
-                    focusNode: _adFocus,
-                    textInputAction: TextInputAction.next,
-                    style: TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                      hintText: "Ad",
-                      hintStyle: TextStyle(color: Colors.grey),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      prefixIcon: Icon(Icons.person, color: Colors.grey),
-                    ),
-                    onFieldSubmitted: (_) {
-                      FocusScope.of(context).requestFocus(_soyadFocus);
-                    },
+                  _buildTextField(
+                    "Ad",
+                    adController,
+                    _adFocus,
+                    _soyadFocus,
+                    Icons.person,
                   ),
                   customSizedBox(),
-
-                  TextFormField(
-                    controller: soyadController,
-                    focusNode: _soyadFocus,
-                    textInputAction: TextInputAction.next,
-                    style: TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                      hintText: "Soyad",
-                      hintStyle: TextStyle(color: Colors.grey),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      prefixIcon: Icon(Icons.person, color: Colors.grey),
-                    ),
-                    onFieldSubmitted: (_) {
-                      FocusScope.of(context).requestFocus(_kullaniciAdiFocus);
-                    },
+                  _buildTextField(
+                    "Soyad",
+                    soyadController,
+                    _soyadFocus,
+                    _kullaniciAdiFocus,
+                    Icons.person,
                   ),
                   customSizedBox(),
-
-                  TextFormField(
-                    controller: kullaniciAdiController,
-                    focusNode: _kullaniciAdiFocus,
-                    textInputAction: TextInputAction.next,
-                    style: TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                      hintText: "Kullanıcı Adı",
-                      hintStyle: TextStyle(color: Colors.grey),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      prefixIcon: Icon(Icons.verified_user, color: Colors.grey),
-                    ),
-                    onFieldSubmitted: (_) {
-                      FocusScope.of(context).requestFocus(_sifreFocus);
-                    },
+                  _buildTextField(
+                    "Kullanıcı Adı",
+                    kullaniciAdiController,
+                    _kullaniciAdiFocus,
+                    _sifreFocus,
+                    Icons.verified_user,
                   ),
                   customSizedBox(),
-
-                  TextFormField(
-                    controller: sifreController,
-                    focusNode: _sifreFocus,
-                    style: TextStyle(color: Colors.white),
-                    keyboardType: TextInputType.number,
-                    maxLength: 4,
-                    obscureText: !_sifreGoster,
-                    decoration: InputDecoration(
-                      hintText: "Şifre",
-                      hintStyle: TextStyle(color: Colors.grey),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      prefixIcon: Icon(
-                        Icons.password_sharp,
-                        color: Colors.grey,
-                      ),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _sifreGoster
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                          color: Colors.grey,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _sifreGoster = !_sifreGoster;
-                          });
-                        },
-                      ),
-                      counterStyle: TextStyle(color: Colors.grey),
-                    ),
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    textInputAction: TextInputAction.done,
-                    onFieldSubmitted: (_) {
-                      FocusScope.of(context).unfocus();
-                    },
+                  _buildTextField(
+                    "Şifre",
+                    sifreController,
+                    _sifreFocus,
+                    _gizliSoruFocus,
+                    Icons.password_sharp,
+                    isPassword: true,
+                  ),
+                  customSizedBox(),
+                  _buildTextField(
+                    "Gizli Soru",
+                    gizliSoruController,
+                    _gizliSoruFocus,
+                    null,
+                    Icons.help_outline,
                   ),
                   customSizedBox(),
                   Center(
@@ -176,11 +117,13 @@ class _HesapOlusturState extends State<HesapOlustur> {
                         String kullaniciAdi = kullaniciAdiController.text
                             .trim();
                         String sifre = sifreController.text.trim();
+                        String gizliSoru = gizliSoruController.text.trim();
 
                         if (ad.isEmpty ||
                             soyad.isEmpty ||
                             kullaniciAdi.isEmpty ||
-                            sifre.isEmpty) {
+                            sifre.isEmpty ||
+                            gizliSoru.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text("Lütfen tüm alanları doldurun!"),
@@ -188,11 +131,13 @@ class _HesapOlusturState extends State<HesapOlustur> {
                           );
                           return;
                         }
+
                         bool sonuc = await KisilerDao().kullaniciEkle(
                           ad,
                           soyad,
                           kullaniciAdi,
                           sifre,
+                          gizliSoru,
                         );
 
                         if (sonuc) {
@@ -243,17 +188,60 @@ class _HesapOlusturState extends State<HesapOlustur> {
   }
 
   Widget customSizedBox() => SizedBox(height: 20);
-}
 
-InputDecoration customInputDecoration(String hintText) {
-  return InputDecoration(
-    hintText: hintText,
-    hintStyle: TextStyle(color: Colors.grey),
-    enabledBorder: UnderlineInputBorder(
-      borderSide: BorderSide(color: Colors.grey),
-    ),
-    focusedBorder: UnderlineInputBorder(
-      borderSide: BorderSide(color: Colors.grey),
-    ),
-  );
+  Widget _buildTextField(
+    String hint,
+    TextEditingController controller,
+    FocusNode focusNode,
+    FocusNode? nextFocus,
+    IconData icon, {
+    bool isPassword = false,
+  }) {
+    return TextFormField(
+      controller: controller,
+      focusNode: focusNode,
+      textInputAction: nextFocus != null
+          ? TextInputAction.next
+          : TextInputAction.done,
+      obscureText: isPassword ? !_sifreGoster : false,
+      style: TextStyle(color: Colors.white),
+      maxLength: isPassword ? 4 : null,
+      keyboardType: isPassword ? TextInputType.number : TextInputType.text,
+      decoration: InputDecoration(
+        hintText: hint,
+        hintStyle: TextStyle(color: Colors.grey),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.grey),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.grey),
+        ),
+        prefixIcon: Icon(icon, color: Colors.grey),
+        suffixIcon: isPassword
+            ? IconButton(
+                icon: Icon(
+                  _sifreGoster ? Icons.visibility : Icons.visibility_off,
+                  color: Colors.grey,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _sifreGoster = !_sifreGoster;
+                  });
+                },
+              )
+            : null,
+        counterStyle: TextStyle(color: Colors.grey),
+      ),
+      inputFormatters: isPassword
+          ? [FilteringTextInputFormatter.digitsOnly]
+          : null,
+      onFieldSubmitted: (_) {
+        if (nextFocus != null) {
+          FocusScope.of(context).requestFocus(nextFocus);
+        } else {
+          FocusScope.of(context).unfocus();
+        }
+      },
+    );
+  }
 }

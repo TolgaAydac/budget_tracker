@@ -5,6 +5,7 @@ import 'package:gelir_gider/hesapOlustur.dart';
 import 'package:gelir_gider/KisilerDao.dart';
 import 'package:gelir_gider/Kullaniciler.dart';
 import 'package:gelir_gider/AnaSayfa.dart';
+import 'SifremiUnuttum_Sayfasi.dart';
 
 void main() {
   runApp(const MyApp());
@@ -170,7 +171,14 @@ class _MyHomePageState extends State<MyHomePage> {
                     customSizedBox(),
                     Center(
                       child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SifremiUnuttumSayfasi(),
+                            ),
+                          );
+                        },
                         child: Text(
                           "Şifremi Unuttum!",
                           style: TextStyle(color: Colors.pink[200]),
