@@ -24,7 +24,6 @@ A simple **Budget Tracker App** built with **Flutter** to help you manage your i
 
 ## Roadmap
 - Some features are still under development.
-- "Forgot Password" functionality is not yet implemented.
 - UI screenshots may show features that are not fully functional yet.
 - **Monthly Summary Page** is not connected to the SQL database yet.  
   - Data is currently displayed manually for demonstration.  
