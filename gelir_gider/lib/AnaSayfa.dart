@@ -3,6 +3,7 @@ import 'package:gelir_gider/Gider.dart';
 import 'package:gelir_gider/gunceldurum.dart';
 import 'Gelir.dart';
 import 'aylik_ozet.dart';
+import 'dart:io'; // exit(0) için
 
 class AnaSayfa extends StatefulWidget {
   const AnaSayfa({super.key});
@@ -27,14 +28,63 @@ class _AnaSayfaState extends State<AnaSayfa> {
       backgroundColor: Color(0xFF21254A),
       body: Column(
         children: [
-          Container(
-            height: 185,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: AssetImage("resimler/topImage.png"),
+          Stack(
+            children: [
+              Container(
+                height: 185,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage("resimler/topImage.png"),
+                  ),
+                ),
               ),
-            ),
+              Positioned(
+                top: 55,
+                left: 10,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.keyboard_return_outlined,
+                    color: Color(0xFF21254A),
+                    size: 30,
+                  ),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        backgroundColor: Color(0xFF21254A),
+                        title: Text(
+                          "Çıkış Yap",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        content: Text(
+                          "Uygulamadan çıkmak istediğinize emin misiniz?",
+                          style: TextStyle(color: Colors.white70),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: Text(
+                              "İptal",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              exit(0);
+                            },
+                            child: Text(
+                              "Çıkış",
+                              style: TextStyle(color: Colors.redAccent),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
           Expanded(child: sayfaListesi[secilenIndeks]),
         ],
@@ -72,7 +122,6 @@ class _AnaSayfaState extends State<AnaSayfa> {
           iconSize: 45,
           elevation: 0,
           currentIndex: secilenIndeks,
-
           onTap: (indeks) {
             setState(() {
               secilenIndeks = indeks;
