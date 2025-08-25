@@ -14,7 +14,7 @@ class _HesapOlusturState extends State<HesapOlustur> {
   final soyadController = TextEditingController();
   final kullaniciAdiController = TextEditingController();
   final sifreController = TextEditingController();
-  final gizliSoruController = TextEditingController();
+  final gizliCevapController = TextEditingController();
 
   bool _sifreGoster = false;
 
@@ -23,6 +23,8 @@ class _HesapOlusturState extends State<HesapOlustur> {
   final FocusNode _kullaniciAdiFocus = FocusNode();
   final FocusNode _sifreFocus = FocusNode();
   final FocusNode _gizliSoruFocus = FocusNode();
+
+  String? secilenSoru;
 
   @override
   void dispose() {
@@ -36,7 +38,7 @@ class _HesapOlusturState extends State<HesapOlustur> {
     soyadController.dispose();
     kullaniciAdiController.dispose();
     sifreController.dispose();
-    gizliSoruController.dispose();
+    gizliCevapController.dispose();
     super.dispose();
   }
 
@@ -53,9 +55,10 @@ class _HesapOlusturState extends State<HesapOlustur> {
       backgroundColor: Color(0xFF21254A),
       body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Center(
+          Align(
+            alignment: Alignment.topCenter,
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -67,7 +70,7 @@ class _HesapOlusturState extends State<HesapOlustur> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  customSizedBox(),
+                  SizedBox(height: 24),
                   _buildTextField(
                     "Ad",
                     adController,
@@ -101,12 +104,74 @@ class _HesapOlusturState extends State<HesapOlustur> {
                     isPassword: true,
                   ),
                   customSizedBox(),
-                  _buildTextField(
-                    "Gizli Soru",
-                    gizliSoruController,
-                    _gizliSoruFocus,
-                    null,
-                    Icons.help_outline,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      DropdownButtonFormField<String>(
+                        value: secilenSoru,
+                        decoration: InputDecoration(
+                          hintText: "Gizli Soru Seçiniz",
+                          hintStyle: TextStyle(color: Colors.grey[400]),
+                          filled: true,
+                          fillColor: Color(0xFF2e2b50),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                        dropdownColor: Color(0xFF2e2b50),
+                        items: [
+                          DropdownMenuItem(
+                            value: null,
+                            child: Text(
+                              "Lütfen Gizli Sorunuzu Seçiniz",
+                              style: TextStyle(color: Colors.grey[400]),
+                            ),
+                          ),
+                          DropdownMenuItem(
+                            value: "En sevdiğiniz yemek?",
+                            child: Text(
+                              "En sevdiğiniz yemek?",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          DropdownMenuItem(
+                            value: "En sevdiğiniz renk?",
+                            child: Text(
+                              "En sevdiğiniz renk?",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          DropdownMenuItem(
+                            value: "En sevdiğiniz sayı?",
+                            child: Text(
+                              "En sevdiğiniz sayı?",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ],
+                        onChanged: (deger) {
+                          setState(() {
+                            secilenSoru = deger;
+                          });
+                        },
+                      ),
+                      SizedBox(height: 10),
+                      TextField(
+                        controller: gizliCevapController,
+                        decoration: InputDecoration(
+                          hintText: "Cevabınızı girin",
+                          hintStyle: TextStyle(color: Colors.grey[400]),
+                          filled: true,
+                          fillColor: Color(0xFF2e2b50),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
                   ),
                   customSizedBox(),
                   Center(
@@ -117,13 +182,15 @@ class _HesapOlusturState extends State<HesapOlustur> {
                         String kullaniciAdi = kullaniciAdiController.text
                             .trim();
                         String sifre = sifreController.text.trim();
-                        String gizliSoru = gizliSoruController.text.trim();
+                        String? gizliSoru = secilenSoru;
+                        String gizliCevap = gizliCevapController.text.trim();
 
                         if (ad.isEmpty ||
                             soyad.isEmpty ||
                             kullaniciAdi.isEmpty ||
                             sifre.isEmpty ||
-                            gizliSoru.isEmpty) {
+                            gizliSoru == null ||
+                            gizliCevap.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text("Lütfen tüm alanları doldurun!"),
@@ -138,6 +205,7 @@ class _HesapOlusturState extends State<HesapOlustur> {
                           kullaniciAdi,
                           sifre,
                           gizliSoru,
+                          gizliCevap,
                         );
 
                         if (sonuc) {
@@ -209,19 +277,19 @@ class _HesapOlusturState extends State<HesapOlustur> {
       keyboardType: isPassword ? TextInputType.number : TextInputType.text,
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: TextStyle(color: Colors.grey),
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey),
+        hintStyle: TextStyle(color: Colors.grey[400]),
+        filled: true,
+        fillColor: Color(0xFF2e2b50),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
         ),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey),
-        ),
-        prefixIcon: Icon(icon, color: Colors.grey),
+        prefixIcon: Icon(icon, color: Colors.grey[400]),
         suffixIcon: isPassword
             ? IconButton(
                 icon: Icon(
                   _sifreGoster ? Icons.visibility : Icons.visibility_off,
-                  color: Colors.grey,
+                  color: Colors.grey[400],
                 ),
                 onPressed: () {
                   setState(() {
@@ -230,7 +298,7 @@ class _HesapOlusturState extends State<HesapOlustur> {
                 },
               )
             : null,
-        counterStyle: TextStyle(color: Colors.grey),
+        counterStyle: TextStyle(color: Colors.grey[400]),
       ),
       inputFormatters: isPassword
           ? [FilteringTextInputFormatter.digitsOnly]

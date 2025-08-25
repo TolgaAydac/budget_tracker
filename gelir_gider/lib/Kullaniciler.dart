@@ -5,6 +5,7 @@ class Kullaniciler {
   final String kisi_kullaniciadi;
   final String kisi_sifre;
   final String kisi_gizli_soru;
+  final String cevap;
 
   Kullaniciler(
     this.kisi_id,
@@ -13,5 +14,6 @@ class Kullaniciler {
     this.kisi_kullaniciadi,
     this.kisi_sifre,
     this.kisi_gizli_soru,
+    this.cevap,
   );
 }

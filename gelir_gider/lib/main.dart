@@ -61,6 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
       print("Kisi Kullanıcı Adı :  ${k.kisi_kullaniciadi}");
       print("Kisi Şifre :  ${k.kisi_sifre}");
       print("Kisi Soyad:  ${k.kisi_soyad}");
+      print("Kisi Gizli Soru : ${k.cevap}");
     }
   }
 
@@ -88,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      //resizeToAvoidBottomInset: true,
       backgroundColor: const Color(0xFF21254A),
       body: SingleChildScrollView(
         child: Center(

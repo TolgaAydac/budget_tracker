@@ -11,24 +11,43 @@ class SifremiUnuttumSayfasi extends StatefulWidget {
 
 class _SifremiUnuttumSayfasiState extends State<SifremiUnuttumSayfasi> {
   final TextEditingController _kullaniciAdiController = TextEditingController();
-  final TextEditingController _gizliSoruController = TextEditingController();
+  final TextEditingController _cevapController = TextEditingController();
   final TextEditingController _yeniSifreController = TextEditingController();
 
+  String? _secilenSoru;
   bool _soruDogru = false;
+
+  final List<String> sorular = [
+    "En sevdiğiniz yemek?",
+    "En sevdiğiniz renk?",
+    "En sevdiğiniz sayı?",
+  ];
 
   @override
   void dispose() {
     _kullaniciAdiController.dispose();
-    _gizliSoruController.dispose();
+    _cevapController.dispose();
     _yeniSifreController.dispose();
     super.dispose();
   }
 
   Future<void> _kontrolEt() async {
     String kullaniciAdi = _kullaniciAdiController.text.trim();
-    String gizliSoru = _gizliSoruController.text.trim();
+    String secilenSoru = _secilenSoru ?? "";
+    String cevap = _cevapController.text.trim();
 
-    bool dogruMu = await KisilerDao().gizliSoruKontrol(kullaniciAdi, gizliSoru);
+    if (secilenSoru.isEmpty || cevap.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Lütfen soru seçin ve cevabı girin!")),
+      );
+      return;
+    }
+
+    bool dogruMu = await KisilerDao().gizliSoruKontrolDropdown(
+      kullaniciAdi,
+      secilenSoru,
+      cevap,
+    );
 
     if (dogruMu) {
       setState(() {
@@ -39,7 +58,7 @@ class _SifremiUnuttumSayfasiState extends State<SifremiUnuttumSayfasi> {
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Kullanıcı adı veya gizli soru yanlış!")),
+        SnackBar(content: Text("Kullanıcı adı, soru veya cevap yanlış!")),
       );
     }
   }
@@ -72,6 +91,7 @@ class _SifremiUnuttumSayfasiState extends State<SifremiUnuttumSayfasi> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Color(0xFF21254A),
       appBar: AppBar(
         backgroundColor: Color(0xFF21254A),
@@ -81,7 +101,6 @@ class _SifremiUnuttumSayfasiState extends State<SifremiUnuttumSayfasi> {
             Navigator.pop(context);
           },
         ),
-        title: Text("Şifremi Unuttum", style: TextStyle(color: Colors.white)),
       ),
       body: Stack(
         children: [
@@ -97,22 +116,66 @@ class _SifremiUnuttumSayfasiState extends State<SifremiUnuttumSayfasi> {
             ),
           ),
           Align(
-            alignment: Alignment(0, -0.4),
+            alignment: Alignment(0, -0.95),
             child: SingleChildScrollView(
               padding: EdgeInsets.all(20),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  Text(
+                    "Şifremi Unuttum",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 32),
                   _buildTextField(
                     "Kullanıcı Adı",
                     _kullaniciAdiController,
                     icon: Icons.person,
                   ),
                   SizedBox(height: 16),
+                  DropdownButtonFormField<String>(
+                    value: _secilenSoru,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Color(0xFF2e2b50),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide.none,
+                      ),
+                      hintText: "Lütfen Gizli Sorunuzu Seçiniz",
+                      hintStyle: TextStyle(color: Colors.grey[400]),
+                    ),
+                    dropdownColor: Color(0xFF2e2b50),
+                    items: [
+                      DropdownMenuItem(
+                        child: Text(
+                          "Lütfen Gizli Sorunuzu Seçiniz",
+                          style: TextStyle(color: Colors.white60),
+                        ),
+                        value: null,
+                      ),
+                      ...sorular.map(
+                        (s) => DropdownMenuItem(
+                          child: Text(s, style: TextStyle(color: Colors.white)),
+                          value: s,
+                        ),
+                      ),
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        _secilenSoru = value;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 16),
                   _buildTextField(
-                    "Gizli Sorunuz",
-                    _gizliSoruController,
-                    icon: Icons.question_answer,
+                    "Cevabınızı girin",
+                    _cevapController,
+                    icon: Icons.help_outline,
                   ),
                   SizedBox(height: 16),
                   ElevatedButton(
@@ -139,6 +202,7 @@ class _SifremiUnuttumSayfasiState extends State<SifremiUnuttumSayfasi> {
                       _yeniSifreController,
                       icon: Icons.lock,
                       isObscure: true,
+                      keyboardType: TextInputType.number,
                     ),
                     SizedBox(height: 16),
                     ElevatedButton(
@@ -171,11 +235,13 @@ class _SifremiUnuttumSayfasiState extends State<SifremiUnuttumSayfasi> {
     TextEditingController controller, {
     IconData? icon,
     bool isObscure = false,
+    TextInputType keyboardType = TextInputType.text,
   }) {
     return TextField(
       controller: controller,
       obscureText: isObscure,
       style: TextStyle(color: Colors.white),
+      keyboardType: keyboardType,
       decoration: InputDecoration(
         prefixIcon: icon != null ? Icon(icon, color: Colors.white60) : null,
         hintText: hint,

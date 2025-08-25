@@ -6,7 +6,6 @@ class VeriTabaniYardimcisi {
 
   static Future<Database> veritabaniErisim() async {
     String veritabaniYolu = join(await getDatabasesPath(), veritabaniAdi);
-    
 
     return openDatabase(
       veritabaniYolu,
@@ -31,7 +30,8 @@ class VeriTabaniYardimcisi {
             kisi_soyad TEXT,
             kisi_kullaniciadi TEXT,
             kisi_sifre TEXT,
-            kisi_gizli_soru TEXT NOT NULL
+            kisi_gizli_soru TEXT NOT NULL,
+            kisi_gizli_cevap TEXT NOT NULL
           )
         ''');
 

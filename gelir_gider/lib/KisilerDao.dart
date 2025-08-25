@@ -18,6 +18,7 @@ class KisilerDao {
         satir["kisi_kullaniciadi"] ?? "",
         satir["kisi_sifre"] ?? "",
         satir["kisi_gizli_soru"] ?? "",
+        satir["kisi_gizli_cevap"] ?? "",
       );
     });
   }
@@ -28,6 +29,7 @@ class KisilerDao {
     String kullaniciAdi,
     String sifre,
     String gizliSoru,
+    String cevap,
   ) async {
     var db = await VeriTabaniYardimcisi.veritabaniErisim();
 
@@ -38,6 +40,7 @@ class KisilerDao {
         'kisi_kullaniciadi': kullaniciAdi,
         'kisi_sifre': sifre,
         'kisi_gizli_soru': gizliSoru,
+        'kisi_gizli_cevap': cevap,
       });
       return true;
     } catch (e) {
@@ -58,13 +61,18 @@ class KisilerDao {
     return sonuc.isNotEmpty;
   }
 
-  Future<bool> gizliSoruKontrol(String kullaniciAdi, String gizliSoru) async {
+  Future<bool> gizliSoruKontrolDropdown(
+    String kullaniciAdi,
+    String secilenSoru,
+    String cevap,
+  ) async {
     var db = await VeriTabaniYardimcisi.veritabaniErisim();
 
     List<Map<String, dynamic>> sonuc = await db.query(
       '"Kullanıcı Giriş"',
-      where: 'kisi_kullaniciadi = ? AND kisi_gizli_soru = ?',
-      whereArgs: [kullaniciAdi, gizliSoru],
+      where:
+          'kisi_kullaniciadi = ? AND kisi_gizli_soru = ? AND kisi_gizli_cevap = ?',
+      whereArgs: [kullaniciAdi, secilenSoru, cevap],
     );
 
     return sonuc.isNotEmpty;
