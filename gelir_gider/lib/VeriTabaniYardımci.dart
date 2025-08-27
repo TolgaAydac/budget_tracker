@@ -9,33 +9,42 @@ class VeriTabaniYardimcisi {
 
     return openDatabase(
       veritabaniYolu,
-      version: 1,
+      version: 2,
       onCreate: (db, version) async {
         print("Veritabanı oluşturuluyor...");
-
         await db.execute('''
-          CREATE TABLE islemler (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            tutar INTEGER NOT NULL,
-            aciklama TEXT,
-            tarih TEXT,
-            tipi TEXT
-          )
-        ''');
-
+        CREATE TABLE islemler (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          tutar INTEGER NOT NULL,
+          aciklama TEXT,
+          tarih TEXT,
+          tipi TEXT,
+          kisi_id INTEGER
+        )
+      ''');
         await db.execute('''
-          CREATE TABLE "Kullanıcı Giriş" (
-            kisi_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            kisi_ad TEXT,
-            kisi_soyad TEXT,
-            kisi_kullaniciadi TEXT,
-            kisi_sifre TEXT,
-            kisi_gizli_soru TEXT NOT NULL,
-            kisi_gizli_cevap TEXT NOT NULL
-          )
-        ''');
-
+        CREATE TABLE "Kullanıcı Giriş" (
+          kisi_id INTEGER PRIMARY KEY AUTOINCREMENT,
+          kisi_ad TEXT,
+          kisi_soyad TEXT,
+          kisi_kullaniciadi TEXT,
+          kisi_sifre TEXT,
+          kisi_gizli_soru TEXT NOT NULL,
+          kisi_gizli_cevap TEXT NOT NULL
+        )
+      ''');
         print("Tablolar oluşturuldu.");
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < 2) {
+          await db.execute(
+            'ALTER TABLE islemler ADD COLUMN kisi_id INTEGER DEFAULT 0',
+          );
+          await db.execute(
+            'ALTER TABLE "Kullanıcı Giriş" ADD COLUMN kisi_gizli_cevap TEXT NOT NULL DEFAULT ""',
+          );
+          print("Tablolar upgrade edildi.");
+        }
       },
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gelir_gider/main.dart';
 import 'islem.dart';
 import 'islemlerDao.dart';
 
@@ -107,11 +108,13 @@ class _giderEkleState extends State<giderEkle> {
                       int tutarInt = int.tryParse(tutarString) ?? 0;
 
                       Islem yeniGider = Islem(
+                        id: null,
                         aciklama: _aciklamaController.text,
                         tutar: tutarInt,
                         tarih:
                             "${_secilenTarih!.day}.${_secilenTarih!.month}.${_secilenTarih!.year}",
                         tipi: "Gider",
+                        kisiId: aktifKullaniciId,
                       );
 
                       bool sonuc = await IslemlerDao().islemEkle(yeniGider);

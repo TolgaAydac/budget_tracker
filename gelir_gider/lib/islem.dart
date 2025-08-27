@@ -4,6 +4,7 @@ class Islem {
   final String? aciklama;
   final String? tarih;
   final String tipi;
+  final int kisiId;
 
   Islem({
     this.id,
@@ -11,6 +12,7 @@ class Islem {
     this.aciklama,
     this.tarih,
     required this.tipi,
+    required this.kisiId,
   });
 
   Map<String, dynamic> toMap() {
@@ -20,6 +22,7 @@ class Islem {
       'aciklama': aciklama,
       'tarih': tarih,
       'tipi': tipi,
+      'kisi_id': kisiId,
     };
   }
 
@@ -30,6 +33,7 @@ class Islem {
       aciklama: map['aciklama'],
       tarih: map['tarih'],
       tipi: map['tipi'],
+      kisiId: map['kisi_id'],
     );
   }
 }

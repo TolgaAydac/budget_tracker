@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gelir_gider/main.dart';
 import 'package:intl/intl.dart';
 import 'islemlerDao.dart';
 import 'islem.dart';
@@ -25,7 +26,7 @@ class _Gider_SayfasiState extends State<Gider_Sayfasi> {
   }
 
   Future<void> giderleriYukle() async {
-    final tumIslemler = await IslemlerDao().tumIslemler();
+    final tumIslemler = await IslemlerDao().tumIslemler(aktifKullaniciId);
     setState(() {
       giderler = tumIslemler
           .where((i) => i.tipi.toLowerCase() == "gider")

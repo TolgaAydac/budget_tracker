@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'IslemlerDao.dart';
+import 'main.dart';
 
 class gunceldurum extends StatefulWidget {
   const gunceldurum({Key? key}) : super(key: key);
@@ -23,8 +24,8 @@ class _gunceldurumState extends State<gunceldurum> {
 
   Future<void> _gelirVeGiderleriGetir() async {
     final dao = IslemlerDao();
-    int gelir = await dao.toplamTutarByTipi("Gelir");
-    int gider = await dao.toplamTutarByTipi("Gider");
+    int gelir = await dao.toplamTutarByTipi("Gelir", aktifKullaniciId);
+    int gider = await dao.toplamTutarByTipi("Gider", aktifKullaniciId);
 
     setState(() {
       toplamGelir = gelir;

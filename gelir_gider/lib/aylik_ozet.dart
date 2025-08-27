@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gelir_gider/main.dart';
 import 'package:intl/intl.dart';
 import 'islemlerDao.dart';
 import 'islem.dart';
@@ -35,7 +36,7 @@ class _AylikOzetSayfasiState extends State<AylikOzetSayfasi> {
   }
 
   Future<void> _verileriYukle() async {
-    final tumIslemler = await IslemlerDao().tumIslemler();
+    final tumIslemler = await IslemlerDao().tumIslemler(aktifKullaniciId);
 
     Map<String, List<Islem>> temp = {};
 

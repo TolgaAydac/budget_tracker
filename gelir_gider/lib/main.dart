@@ -7,6 +7,8 @@ import 'package:gelir_gider/Kullaniciler.dart';
 import 'package:gelir_gider/AnaSayfa.dart';
 import 'SifremiUnuttum_Sayfasi.dart';
 
+int aktifKullaniciId = 0;
+
 void main() {
   runApp(const MyApp());
 }
@@ -209,6 +211,13 @@ class _MyHomePageState extends State<MyHomePage> {
                               .kullaniciKontrol(kullaniciAdi, sifre);
 
                           if (girisBasarili) {
+                            Kullaniciler? girisYapan = await KisilerDao()
+                                .kullaniciGetir(kullaniciAdi, sifre);
+
+                            if (girisYapan != null) {
+                              aktifKullaniciId = girisYapan.kisi_id;
+                              print("Aktif Kullanıcı ID: $aktifKullaniciId");
+                            }
                             Navigator.pushReplacementNamed(
                               context,
                               '/AnaSayfa',

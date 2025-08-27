@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gelir_gider/main.dart';
 import 'islemlerDao.dart';
 import 'islem.dart';
 
@@ -113,6 +114,7 @@ class _gelirEkleState extends State<gelirEkle> {
                         tarih:
                             "${_secilenTarih!.day}.${_secilenTarih!.month}.${_secilenTarih!.year}",
                         tipi: "Gelir",
+                        kisiId: aktifKullaniciId,
                       );
 
                       bool sonuc = await IslemlerDao().islemEkle(yeniIslem);

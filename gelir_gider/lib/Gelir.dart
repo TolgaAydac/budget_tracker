@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gelir_gider/main.dart';
 import 'package:intl/intl.dart';
 import 'islemlerDao.dart';
 import 'islem.dart';
@@ -28,7 +29,7 @@ class _Gelir_SayfasiState extends State<Gelir_Sayfasi> {
   }
 
   Future<void> gelirleriYukle() async {
-    final tumIslemler = await IslemlerDao().tumIslemler();
+    final tumIslemler = await IslemlerDao().tumIslemler(aktifKullaniciId);
     setState(() {
       gelirler = tumIslemler.where((i) => i.tipi == "Gelir").toList();
     });

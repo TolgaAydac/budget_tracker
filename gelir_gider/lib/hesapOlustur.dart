@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gelir_gider/KisilerDao.dart';
+import 'package:gelir_gider/main.dart';
 
 class HesapOlustur extends StatefulWidget {
   const HesapOlustur({super.key});
@@ -209,6 +210,10 @@ class _HesapOlusturState extends State<HesapOlustur> {
                         );
 
                         if (sonuc) {
+                          var yeniKullanici = await KisilerDao()
+                              .getSonEklenenKullanici();
+                          aktifKullaniciId = yeniKullanici.kisi_id;
+
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text("Kayıt başarılı!")),
                           );

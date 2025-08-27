@@ -16,4 +16,16 @@ class Kullaniciler {
     this.kisi_gizli_soru,
     this.cevap,
   );
+
+  factory Kullaniciler.fromMap(Map<String, dynamic> map) {
+    return Kullaniciler(
+      map['kisi_id'],
+      map['kisi_ad'],
+      map['kisi_soyad'],
+      map['kisi_kullaniciadi'],
+      map['kisi_sifre'],
+      map['kisi_gizli_soru'],
+      map['kisi_gizli_cevap'],
+    );
+  }
 }

@@ -94,4 +94,32 @@ class KisilerDao {
       return false;
     }
   }
+
+  Future<Kullaniciler> getSonEklenenKullanici() async {
+    final db = await VeriTabaniYardimcisi.veritabaniErisim();
+    final maps = await db.query(
+      '"Kullanıcı Giriş"',
+      orderBy: 'kisi_id DESC',
+      limit: 1,
+    );
+    return Kullaniciler.fromMap(maps.first);
+  }
+
+  Future<Kullaniciler?> kullaniciGetir(
+    String kullaniciAdi,
+    String sifre,
+  ) async {
+    var db = await VeriTabaniYardimcisi.veritabaniErisim();
+    List<Map<String, dynamic>> maps = await db.query(
+      '"Kullanıcı Giriş"',
+      where: "kisi_kullaniciadi = ? AND kisi_sifre = ?",
+      whereArgs: [kullaniciAdi, sifre],
+    );
+
+    if (maps.isNotEmpty) {
+      return Kullaniciler.fromMap(maps.first);
+    } else {
+      return null;
+    }
+  }
 }
