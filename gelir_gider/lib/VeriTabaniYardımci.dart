@@ -33,6 +33,20 @@ class VeriTabaniYardimcisi {
           kisi_gizli_cevap TEXT NOT NULL
         )
       ''');
+
+        await db.execute('''
+        CREATE TABLE aylik_islemler (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          kullanici_id INTEGER,
+          ay TEXT,
+          yil INTEGER,
+          tip TEXT,
+          tutar REAL,
+          aciklama TEXT,
+          tarih TEXT
+        )
+      ''');
+
         print("Tablolar oluşturuldu.");
       },
       onUpgrade: (db, oldVersion, newVersion) async {
