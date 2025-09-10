@@ -7,6 +7,9 @@ class VeriTabaniYardimcisi {
   static Future<Database> veritabaniErisim() async {
     String veritabaniYolu = join(await getDatabasesPath(), veritabaniAdi);
 
+    //await deleteDatabase(veritabaniYolu);
+    //print("Veritabanı sıfırlandı!");
+
     return openDatabase(
       veritabaniYolu,
       version: 2,
