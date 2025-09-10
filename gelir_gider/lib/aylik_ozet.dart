@@ -90,7 +90,7 @@ class _AylikOzetSayfasiState extends State<AylikOzetSayfasi> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: Color(0xFF2F3359),
-        title: Text("Silme Onayı", style: TextStyle(color: Colors.white)),
+        title: Text("Emin misiniz?", style: TextStyle(color: Colors.white)),
         content: Text(
           "$ay ayındaki tüm işlemleri silmek istediğinize emin misiniz?",
           style: TextStyle(color: Colors.white70),
