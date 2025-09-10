@@ -9,7 +9,14 @@ import 'SifremiUnuttum_Sayfasi.dart';
 
 int aktifKullaniciId = 0;
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
   runApp(const MyApp());
 }
 
