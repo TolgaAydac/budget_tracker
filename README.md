@@ -1,15 +1,19 @@
 # Budget Tracker App
 
 
-A simple **Budget Tracker App** built with **Flutter** to help you manage your income and expenses.
+A straightforward **Budget Tracker App** in **Flutter** to keep your income and expenses organized.
 
 ## Features
 
 
 - Add, edit, and delete income & expense entries
+- Automatically calculates total balance and profit/loss per month
 - View total balance and profit/loss
+- Monthly summaries in chronological order
 - User authentication (login)
 - Persistent storage with **SQLite**
+- Clean and consistent user interface
+
 
 
 ## Screenshots
@@ -24,11 +28,6 @@ A simple **Budget Tracker App** built with **Flutter** to help you manage your i
 
 ## Roadmap
 - Some features are still under development.
-- UI screenshots may show features that are not fully functional yet.
-- **Monthly Summary Page** is not connected to the SQL database yet.  
-  - Data is currently displayed manually for demonstration.  
-  - Will fetch data from income/expense tables in the future and update monthly.
-
 
 
 

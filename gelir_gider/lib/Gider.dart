@@ -1,11 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gelir_gider/main.dart';
 import 'package:intl/intl.dart';
 import 'islemlerDao.dart';
 import 'islem.dart';
 import 'Gider_ekle.dart';
-import 'VeriTabaniYardımci.dart';
+import 'main.dart';
 
 class Gider_Sayfasi extends StatefulWidget {
   const Gider_Sayfasi({super.key});
@@ -16,7 +14,6 @@ class Gider_Sayfasi extends StatefulWidget {
 
 class _Gider_SayfasiState extends State<Gider_Sayfasi> {
   List<Islem> giderler = [];
-
   final formatter = NumberFormat.decimalPattern('tr_TR');
 
   @override
@@ -27,20 +24,34 @@ class _Gider_SayfasiState extends State<Gider_Sayfasi> {
 
   Future<void> giderleriYukle() async {
     final tumIslemler = await IslemlerDao().tumIslemler(aktifKullaniciId);
+    DateTime now = DateTime.now();
+    String ay = now.month.toString();
+    String yil = now.year.toString();
+
     setState(() {
       giderler = tumIslemler
-          .where((i) => i.tipi.toLowerCase() == "gider")
+          .where(
+            (i) =>
+                i.tipi.toLowerCase() == "gider" &&
+                i.tarih!.split('.')[1] == ay &&
+                i.tarih!.split('.')[2] == yil,
+          )
           .toList();
     });
   }
 
   Future<void> _giderSil(int index) async {
+    final islem = giderler[index];
+
     final bool? onay = await showDialog(
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: Color(0xFF2F3359),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Text("Emin misiniz?", style: TextStyle(color: Colors.white)),
+        title: Text(
+          "Emin misiniz?",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
         content: Text(
           "Bu gideri silmek istediğinize emin misiniz?",
           style: TextStyle(color: Colors.white70),
@@ -59,10 +70,7 @@ class _Gider_SayfasiState extends State<Gider_Sayfasi> {
     );
 
     if (onay == true) {
-      final islem = giderler[index];
-      final db = await VeriTabaniYardimcisi.veritabaniErisim();
-      await db.delete('islemler', where: 'id = ?', whereArgs: [islem.id]);
-
+      await IslemlerDao().islemSil(islem);
       setState(() {
         giderler.removeAt(index);
       });
@@ -75,7 +83,6 @@ class _Gider_SayfasiState extends State<Gider_Sayfasi> {
       color: Color(0xFF21254A),
       padding: EdgeInsets.all(16),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Expanded(
             child: giderler.isEmpty
@@ -162,10 +169,7 @@ class _Gider_SayfasiState extends State<Gider_Sayfasi> {
                   context,
                   MaterialPageRoute(builder: (context) => giderEkle()),
                 );
-
-                if (sonuc == true) {
-                  await giderleriYukle();
-                }
+                if (sonuc == true) await giderleriYukle();
               },
               icon: Icon(Icons.add, color: Colors.white),
               label: Text("Gider Ekle"),

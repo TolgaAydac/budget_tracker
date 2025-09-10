@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'IslemlerDao.dart';
 import 'main.dart';
+import 'islemlerDao.dart';
 
 class gunceldurum extends StatefulWidget {
   const gunceldurum({Key? key}) : super(key: key);
@@ -24,8 +24,20 @@ class _gunceldurumState extends State<gunceldurum> {
 
   Future<void> _gelirVeGiderleriGetir() async {
     final dao = IslemlerDao();
-    int gelir = await dao.toplamTutarByTipi("Gelir", aktifKullaniciId);
-    int gider = await dao.toplamTutarByTipi("Gider", aktifKullaniciId);
+    final now = DateTime.now();
+
+    int gelir = await dao.toplamTutarByTipiVeAy(
+      "Gelir",
+      aktifKullaniciId,
+      now.month,
+      now.year,
+    );
+    int gider = await dao.toplamTutarByTipiVeAy(
+      "Gider",
+      aktifKullaniciId,
+      now.month,
+      now.year,
+    );
 
     setState(() {
       toplamGelir = gelir;
@@ -139,7 +151,7 @@ class _gunceldurumState extends State<gunceldurum> {
                   children: [
                     Icon(Icons.auto_graph, color: Colors.white54, size: 30),
                     Text(
-                      "Gelir ve giderlerini düzenli takip et,\nbütçeni güçlendir!",
+                      "Bu ayki gelir ve giderlerini takip et,\nbütçeni güçlendir!",
                       style: TextStyle(color: Colors.white70, fontSize: 16),
                       textAlign: TextAlign.center,
                     ),
@@ -147,7 +159,7 @@ class _gunceldurumState extends State<gunceldurum> {
                     Divider(color: Colors.white30),
                     SizedBox(height: 5),
                     Text(
-                      "Unutma: Küçük farkındalıklar, büyük finansal değişimlere yol açar.",
+                      "Eski ayların verileri bu sayfada gösterilmez.",
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.grey[400],

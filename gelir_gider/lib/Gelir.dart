@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:gelir_gider/main.dart';
 import 'package:intl/intl.dart';
 import 'islemlerDao.dart';
 import 'islem.dart';
 import 'Gelir_ekle.dart';
-import 'VeriTabaniYardımci.dart';
+import 'main.dart';
 
 class Gelir_Sayfasi extends StatefulWidget {
   const Gelir_Sayfasi({super.key});
@@ -15,12 +14,7 @@ class Gelir_Sayfasi extends StatefulWidget {
 
 class _Gelir_SayfasiState extends State<Gelir_Sayfasi> {
   List<Islem> gelirler = [];
-
   final formatter = NumberFormat.decimalPattern('tr_TR');
-
-  int get toplamGelir {
-    return gelirler.fold(0, (toplam, gelir) => toplam + gelir.tutar);
-  }
 
   @override
   void initState() {
@@ -30,18 +24,34 @@ class _Gelir_SayfasiState extends State<Gelir_Sayfasi> {
 
   Future<void> gelirleriYukle() async {
     final tumIslemler = await IslemlerDao().tumIslemler(aktifKullaniciId);
+    DateTime now = DateTime.now();
+    String ay = now.month.toString();
+    String yil = now.year.toString();
+
     setState(() {
-      gelirler = tumIslemler.where((i) => i.tipi == "Gelir").toList();
+      gelirler = tumIslemler
+          .where(
+            (i) =>
+                i.tipi == "Gelir" &&
+                i.tarih!.split('.')[1] == ay &&
+                i.tarih!.split('.')[2] == yil,
+          )
+          .toList();
     });
   }
 
   Future<void> _gelirSil(int index) async {
+    final islem = gelirler[index];
+
     final bool? onay = await showDialog(
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: Color(0xFF2F3359),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Text("Emin misiniz?", style: TextStyle(color: Colors.white)),
+        title: Text(
+          "Emin misiniz?",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
         content: Text(
           "Bu geliri silmek istediğinize emin misiniz?",
           style: TextStyle(color: Colors.white70),
@@ -60,10 +70,7 @@ class _Gelir_SayfasiState extends State<Gelir_Sayfasi> {
     );
 
     if (onay == true) {
-      final islem = gelirler[index];
-      final db = await VeriTabaniYardimcisi.veritabaniErisim();
-      await db.delete('islemler', where: 'id = ?', whereArgs: [islem.id]);
-
+      await IslemlerDao().islemSil(islem);
       setState(() {
         gelirler.removeAt(index);
       });
@@ -162,10 +169,7 @@ class _Gelir_SayfasiState extends State<Gelir_Sayfasi> {
                   context,
                   MaterialPageRoute(builder: (context) => gelirEkle()),
                 );
-
-                if (kayitYapildi == true) {
-                  await gelirleriYukle();
-                }
+                if (kayitYapildi == true) await gelirleriYukle();
               },
               icon: Icon(Icons.add, color: Colors.white),
               label: Text("Gelir Ekle"),

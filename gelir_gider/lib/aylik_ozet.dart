@@ -54,8 +54,22 @@ class _AylikOzetSayfasiState extends State<AylikOzetSayfasi> {
       temp[ayYil]!.add(i);
     }
 
+    Map<String, List<Islem>> sortedTemp = {};
+    List<String> sortedKeys = temp.keys.toList();
+    sortedKeys.sort((a, b) {
+      int yilA = int.parse(a.split(' ')[1]);
+      int yilB = int.parse(b.split(' ')[1]);
+      int ayA = aylar.indexOf(a.split(' ')[0]);
+      int ayB = aylar.indexOf(b.split(' ')[0]);
+      if (yilA != yilB) return yilA.compareTo(yilB);
+      return ayA.compareTo(ayB);
+    });
+    for (var key in sortedKeys) {
+      sortedTemp[key] = temp[key]!;
+    }
+
     setState(() {
-      aylikIslemler = temp;
+      aylikIslemler = sortedTemp;
     });
   }
 
@@ -69,6 +83,37 @@ class _AylikOzetSayfasiState extends State<AylikOzetSayfasi> {
       }
     }
     return toplam;
+  }
+
+  Future<void> _aySil(String ay) async {
+    bool? onay = await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Color(0xFF2F3359),
+        title: Text("Silme Onayı", style: TextStyle(color: Colors.white)),
+        content: Text(
+          "$ay ayındaki tüm işlemleri silmek istediğinize emin misiniz?",
+          style: TextStyle(color: Colors.white70),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text("İptal", style: TextStyle(color: Colors.white70)),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text("Sil", style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+
+    if (onay == true) {
+      for (var islem in aylikIslemler[ay]!) {
+        await IslemlerDao().islemSil(islem);
+      }
+      _verileriYukle();
+    }
   }
 
   @override
@@ -86,65 +131,88 @@ class _AylikOzetSayfasiState extends State<AylikOzetSayfasi> {
               padding: EdgeInsets.symmetric(vertical: 8),
               children: aylikIslemler.keys.map((ay) {
                 int karZarar = _ayKarZarari(aylikIslemler[ay]!);
-                return Card(
-                  color: Color(0xff31274f),
-                  margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Theme(
-                    data: Theme.of(context).copyWith(
-                      dividerColor: Colors.transparent,
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                    ),
-                    child: ExpansionTile(
-                      title: Text(
-                        ay,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
+                return Stack(
+                  children: [
+                    Card(
+                      color: Color(0xff31274f),
+                      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
                       ),
-                      subtitle: Text(
-                        karZarar >= 0
-                            ? "Kâr: ${formatter.format(karZarar)} ₺"
-                            : "Zarar: ${formatter.format(karZarar.abs())} ₺",
-                        style: TextStyle(
-                          color: karZarar >= 0
-                              ? Colors.greenAccent
-                              : Colors.redAccent,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                      child: Theme(
+                        data: Theme.of(context).copyWith(
+                          dividerColor: Colors.transparent,
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
                         ),
-                      ),
-                      children: aylikIslemler[ay]!.map((islem) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            border: Border(
-                              top: BorderSide(color: Colors.white10),
+                        child: ExpansionTile(
+                          title: Text(
+                            ay,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                          child: ListTile(
-                            title: Text(
-                              islem.aciklama ?? "-",
-                              style: TextStyle(color: Colors.white70),
+                          subtitle: Text(
+                            karZarar >= 0
+                                ? "Kâr: ${formatter.format(karZarar)} ₺"
+                                : "Zarar: ${formatter.format(karZarar.abs())} ₺",
+                            style: TextStyle(
+                              color: karZarar >= 0
+                                  ? Colors.greenAccent
+                                  : Colors.redAccent,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
                             ),
-                            trailing: Text(
-                              "${islem.tipi == "Gelir" ? "+" : "-"}${formatter.format(islem.tutar)} ₺",
-                              style: TextStyle(
-                                color: islem.tipi == "Gelir"
-                                    ? Colors.greenAccent
-                                    : Colors.redAccent,
-                                fontWeight: FontWeight.bold,
+                          ),
+                          children: aylikIslemler[ay]!.map((islem) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  top: BorderSide(color: Colors.white10),
+                                ),
                               ),
-                            ),
-                          ),
-                        );
-                      }).toList(),
+                              child: ListTile(
+                                title: Text(
+                                  islem.aciklama ?? "-",
+                                  style: TextStyle(color: Colors.white70),
+                                ),
+                                trailing: Text(
+                                  "${islem.tipi == "Gelir" ? "+" : "-"}${formatter.format(islem.tutar)} ₺",
+                                  style: TextStyle(
+                                    color: islem.tipi == "Gelir"
+                                        ? Colors.greenAccent
+                                        : Colors.redAccent,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
                     ),
-                  ),
+                    Positioned(
+                      top: 0,
+                      left: 5,
+                      child: GestureDetector(
+                        onTap: () => _aySil(ay),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Color(0xFF7E57C2),
+                            shape: BoxShape.circle,
+                          ),
+                          padding: EdgeInsets.all(5),
+                          child: Icon(
+                            Icons.delete_forever,
+                            color: Colors.white,
+                            size: 15,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 );
               }).toList(),
             ),
