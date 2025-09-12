@@ -26,8 +26,6 @@ A straightforward **Budget Tracker App** in **Flutter** to keep your income and 
   <img src="https://github.com/TolgaAydac/budget_tracker/raw/main/gelir_gider/resimler/home_page.jpg" alt="Home Page" width="250">
 </div>
 
-## Roadmap
-- Some features are still under development.
 
 
 
