@@ -39,10 +39,12 @@ class _gunceldurumState extends State<gunceldurum> {
       now.year,
     );
 
-    setState(() {
-      toplamGelir = gelir;
-      toplamGider = gider;
-    });
+    if (mounted) {
+      setState(() {
+        toplamGelir = gelir;
+        toplamGider = gider;
+      });
+    }
   }
 
   @override

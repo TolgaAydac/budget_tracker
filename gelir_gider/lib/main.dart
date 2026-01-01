@@ -6,11 +6,18 @@ import 'package:gelir_gider/KisilerDao.dart';
 import 'package:gelir_gider/Kullaniciler.dart';
 import 'package:gelir_gider/AnaSayfa.dart';
 import 'SifremiUnuttum_Sayfasi.dart';
+import 'dart:io';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 int aktifKullaniciId = 0;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  if (Platform.isWindows || Platform.isLinux) {
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+  }
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
